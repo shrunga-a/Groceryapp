@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { View,
     StyleSheet,
     Text ,
@@ -7,8 +7,49 @@ import { View,
 import welcomeicon from '../../../assets/welcomeicon.png'
 import {colors,hr80} from '../../globals/style'
 
+import {firebase} from '../../../Firebase/FirebaseConfig'
 
 const WelcomeScreen = ({navigation}) => {
+
+  const [userloged,setuserloged] = useState(null)
+
+  useEffect(()=>{
+    const checklogin =() =>{
+      firebase.auth().onAuthStateChanged((user)=>{
+        if(user){
+         // console.log(user)
+          setuserloged(user)
+
+        }
+        else{
+          setuserloged(null)
+          console.log("no user logged in")
+          
+        }
+
+      })
+
+    }
+    checklogin()
+
+  },[])
+
+ // console.log(userloged)
+
+  const handellogout=()=>{
+    firebase.auth().signOut()
+    .then(()=>{
+      setuserloged(null)
+      console.log("user logged out")
+
+      
+    })
+    .catch((error) =>{
+      console.log(error)
+
+    })
+  }
+
   return (
     <View style={style.container}>
 
@@ -20,17 +61,38 @@ const WelcomeScreen = ({navigation}) => {
      <View style={hr80}/>
 
 
-     <View style={style.btnout}>
+     {userloged == null ? 
+      <View style={style.btnout}>
 
-     <TouchableOpacity onPress={()=> navigation.navigate('Signup')}>
-     <Text style={style.btn}> Sign Up</Text>
-     </TouchableOpacity>
-
-     <TouchableOpacity onPress={()=> navigation.navigate('LoginScreen')}>
-     <Text style={style.btn}> Log In</Text>
-     </TouchableOpacity>
+      <TouchableOpacity onPress={()=> navigation.navigate('Signup')}>
+      <Text style={style.btn}> Sign Up</Text>
+      </TouchableOpacity>
+ 
+      <TouchableOpacity onPress={()=> navigation.navigate('LoginScreen')}>
+      <Text style={style.btn}> Log In</Text>
+      </TouchableOpacity>
+      
+      </View>
+      :
+      
+      
+      <View style={style.logged}>
+      
+      <Text style={style.textlog}>Sign In as<Text style={style.textlogin}> {userloged.email}</Text></Text>
      
-     </View>
+      
+      <TouchableOpacity onPress={()=> navigation.navigate('Home')}>
+      <Text style={style.btn}>Home page</Text>
+      </TouchableOpacity>
+ 
+      <TouchableOpacity onPress={()=>  handellogout()}>
+      <Text style={style.btn}> Log out</Text>
+      </TouchableOpacity>
+    
+      </View>
+    
+    
+    }
     </View> 
 
     </View>
@@ -48,11 +110,12 @@ const style = StyleSheet.create({
 
     },
     title:{
-        fontSize: 50,
+        fontSize: 40,
         color: colors.col1,
         textAlign: 'center',
-         marginVertical: 10,
+         marginVertical: 5,
         fontWeight: '200',
+      //  marginTop: 10,
     },
     logoout: {
             width: '80%',
@@ -74,6 +137,9 @@ const style = StyleSheet.create({
         },
         btnout:{
           flexDirection: 'row',
+        
+         
+
         },
         btn:{
             fontSize: 20,
@@ -86,7 +152,32 @@ const style = StyleSheet.create({
             borderRadius:10,
             padding:9,
             paddingHorizontal:20,
+        },
+        logged:{
+
+           flexDirection:'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+           
+        
+          
+        },
+        textlog:{
+            fontSize: 17,
+            color: colors.col1,
+
+
+        },
+        textlogin:{
+          fontSize: 19,
+          color: colors.col1,
+          fontWeight: '600',
+          textDecorationLine: 'underline',
+          textDecorationStyle: 'solid',
+
         }
+ 
+        
 
           
    

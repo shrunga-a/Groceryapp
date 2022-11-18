@@ -7,6 +7,8 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Octicons } from '@expo/vector-icons';
 
 
+import {firebase} from '../../../Firebase/FirebaseConfig'
+
 
 
 
@@ -16,12 +18,42 @@ const LoginScreen = ({navigation}) => {
     const [emailfocus,setemailfocus] = useState(false);
     const [passwordfocus,setpasswordfocus] = useState(false);
     const [showpassword,showsetpassword] = useState(false);
-  return (
+
+    const [email,setemail] = useState('')
+    const [password,setpassword] = useState('')
+    const [customerror,showcustomerror] = useState('')
+
+
+    const handelLogin =()=>{
+        firebase.auth().signInWithEmailAndPassword(email,password)
+        .then((userCridentials)=>{
+            var user = userCridentials.user;
+            console.log("loged in successfully")
+           // console.log(user)
+           navigation.navigate('Welcomepage')
+        })
+        .catch((error)=>{
+            var errorMsg = error.message;
+            console.log(errorMsg)
+            if(errorMsg === 'Firebase : The email address is badly formatted. (auth/email-already-in-use).'){
+                showcustomerror("enter a valid email address")
+            }
+            else{
+                showcustomerror("incorrect email or password")
+            }
+           
+
+        })
+
+    }
+
+  return (    
     <View style={style.container}>
     <Text style={style.head1}>
      Sign In
-    
     </Text>
+
+    {customerror !== '' && <Text style={style.customerror}>{customerror}</Text>}
 
     <View style={style.inputout}>
     <AntDesign name="user" size={24} color={emailfocus === true? colors.text1 : colors.text2}/>
@@ -29,7 +61,10 @@ const LoginScreen = ({navigation}) => {
      onFocus={() =>{
         setemailfocus(true)
         setpasswordfocus(false)
+        showcustomerror('')
      }} 
+     onChangeText={(text)=> {
+        setemail(text)}}
      />
      </View>
 
@@ -39,8 +74,15 @@ const LoginScreen = ({navigation}) => {
      onFocus={()=>{
         setemailfocus(false)
         setpasswordfocus(true)
+        showcustomerror('')
+       
 
      }}
+
+     onChangeText={(text)=> {
+        setpassword(text)}}
+
+     //onChangeText={(text)=> setpassword(text)}
 
      secureTextEntry={showpassword=== false ? true : false}
      
@@ -49,7 +91,7 @@ const LoginScreen = ({navigation}) => {
         showsetpassword(!showpassword) }} />
      </View>
 
-     <TouchableOpacity style={style.touch} onPress={()=>navigation.navigate('Home')}>
+     <TouchableOpacity style={style.touch} onPress={()=> handelLogin()}>
      <Text style={style.text} > Sign In </Text>
      
      </TouchableOpacity>
@@ -167,6 +209,16 @@ const style= StyleSheet.create({
     },
     signup:{
         color:colors.text1,
+    },
+    customerror:{
+        color: 'red',
+        fontSize: 18,
+        textAlign: 'center',
+        marginTop: 10,
+        borderColor: 'red',
+        borderWidth: 1,
+        borderRadius: 10,
+        padding: 10,
     }
 
 
