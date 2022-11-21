@@ -31,16 +31,10 @@ const SignUpScreen = ({navigation}) => {
     const [address,setaddress] = useState('');
 
     const [costerror,setcosterror] = useState('');
-    const [successmsg,setsuccessmsg] = useState('');
+    const [successmsg,setsuccessmsg] = useState(null);
 
     const handelSignup = () =>{
-        const FormData ={
-            email: email,
-            name: name,
-            password: password,
-           // cpassword: cpassword,
-            address: address,
-        }
+     
         if(password != cpassword){
            // alert("The password doesn't match")-- one way of showing the error msg
            setcosterror("password  doesn't match");
@@ -52,12 +46,26 @@ const SignUpScreen = ({navigation}) => {
         }
         try{
             firebase.auth().createUserWithEmailAndPassword(email,password)
-            .then(() =>{
+            .then((UserCredentials) =>{
+                //console.log(UserCredentials)
                 console.log("user created successfully")
                // setsuccessmsg('user successfully created')
-                const Userref = firebase.firestore().collection('UserData');
+                if(UserCredentials ?.user.uid ){
 
-                Userref.add(FormData).then(()=>{
+                    const Userref = firebase.firestore().collection('UserData');
+
+                Userref.add(
+                    {
+                        email: email,
+                        name: name,
+                        password: password,
+                       // cpassword: cpassword,
+                        address: address,
+                        uid: UserCredentials?.user.uid
+                    }
+
+
+                ).then(()=>{
                     console.log("data added to firestore successfully");
                     setsuccessmsg('user successfully created')
                     
@@ -68,6 +76,7 @@ const SignUpScreen = ({navigation}) => {
 
                 })
 
+                }
             })
             .catch((error) =>{
                 console.log('signup firebase error', error.message)
@@ -92,7 +101,7 @@ const SignUpScreen = ({navigation}) => {
 
         }
         catch(error){
-            console.log( 'signup system error',error.message)
+            console.log( 'signup system error ',error.message)
 
         }
         
@@ -154,7 +163,7 @@ const SignUpScreen = ({navigation}) => {
          }}
          onChangeText={(text)=> setpassword(text)}
     
-         secureTextEntry={showpassword=== false ? true : false}
+         secureTextEntry={showpassword === false ? true : false}
          
          />
          <Octicons name={showpassword == false ? "eye-closed":'eye'} size={24} color="black" onPress={()=> {

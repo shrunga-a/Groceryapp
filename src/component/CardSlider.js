@@ -1,9 +1,17 @@
 import React from 'react'
-import { View ,Text,StyleSheet, FlatList,Image} from 'react-native'
+import { View ,Text,StyleSheet, FlatList,Image, TouchableOpacity} from 'react-native'
 import { colors, product ,dairyproduct } from '../globals/style'
 
-const CardSlider = ({ title,data }) => {
+const CardSlider = ({ title,data, navigation }) => {
    // console.log(title)
+
+   const openProductpage =(item) => {
+    navigation.navigate('productpage', item)
+
+    
+
+  //  console.log(item)
+   }
   return (
    <View style={style.container}>
    <Text style={style.cardouthead}> {title}</Text>
@@ -13,6 +21,13 @@ const CardSlider = ({ title,data }) => {
    showsHorizontalScrollIndicator={false}
    data={data}
    renderItem={({item}) => (
+    <TouchableOpacity key={item.index} onPress={()=>{
+        openProductpage(item)
+
+
+
+    }}>
+
     <View style={style.card}>
 
     <View style={style.s1}>
@@ -32,6 +47,10 @@ const CardSlider = ({ title,data }) => {
      
      </View>
     </View>
+    
+    
+    </TouchableOpacity>
+  
 
     
    )}

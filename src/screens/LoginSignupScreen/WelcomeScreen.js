@@ -27,10 +27,10 @@ const WelcomeScreen = ({navigation}) => {
           
         }
 
-      })
+      });
 
     }
-    checklogin()
+    checklogin();
 
   },[])
 
@@ -61,7 +61,7 @@ const WelcomeScreen = ({navigation}) => {
      <View style={hr80}/>
 
 
-     {userloged == null ? 
+     {userloged === null ? 
       <View style={style.btnout}>
 
       <TouchableOpacity onPress={()=> navigation.navigate('Signup')}>
@@ -82,7 +82,7 @@ const WelcomeScreen = ({navigation}) => {
      
       
       <TouchableOpacity onPress={()=> navigation.navigate('Home')}>
-      <Text style={style.btn}>Home page</Text>
+      <Text style={style.btn}>Next</Text>
       </TouchableOpacity>
  
       <TouchableOpacity onPress={()=>  handellogout()}>

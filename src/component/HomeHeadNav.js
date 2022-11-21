@@ -1,5 +1,5 @@
 import React from 'react'
-import {View,Text,StyleSheet} from 'react-native'
+import {View,Text,StyleSheet, TouchableOpacity} from 'react-native'
 
 import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
@@ -7,7 +7,7 @@ import  { colors } from '../globals/style';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 
-const HomeHeadNav = () => {
+const HomeHeadNav = ({navigation}) => {
   return (
     <View  style={styles.container}>
     <Feather name="menu" size={24} color="black" />
@@ -18,9 +18,12 @@ const HomeHeadNav = () => {
 
     
     </View>
+    <TouchableOpacity onPress={()=> navigation.navigate('Userprofile')}>
     <FontAwesome5 name="user-alt" size={24} color="black" />
+    </TouchableOpacity>
     
     
+      
     
     
     </View>

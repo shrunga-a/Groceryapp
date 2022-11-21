@@ -10,14 +10,14 @@ import { AntDesign } from '@expo/vector-icons';
 
 import { firebase } from '../../Firebase/FirebaseConfig'
 import CardSlider from '../component/CardSlider'
+ 
 
-
-const HomeScreen = () => {
+const HomeScreen = ({navigation}) => {
   
   const [groceryData, setgroceryData] =useState([])
   const [productsdata,setproductsdata]= useState([])
   const [dairyproductsdata,setdairyproductsdata] = useState([])
-
+  
    const groceryref = firebase.firestore().collection('GroceryData');
 
   useEffect(()=>{
@@ -44,7 +44,7 @@ const HomeScreen = () => {
   return (
     <ScrollView style={style.container}>
     <StatusBar/>
-    <HomeHeadNav/>
+    <HomeHeadNav navigation={navigation}/>
     
 
     <View style={style.searchbox}>
@@ -71,13 +71,7 @@ const HomeScreen = () => {
 
 
       )
-        
-
-
     }
-    
-
-
    }}
    
    />
@@ -88,11 +82,11 @@ const HomeScreen = () => {
     <OfferSlider/>
     <Categories/>
    
-   <CardSlider title={"Top Offers"} data={groceryData} />
+   <CardSlider title={"Top Offers"} data={groceryData}  navigation={navigation}/>
 
-   <CardSlider title={"Products"} data={productsdata} />
+   <CardSlider title={"Products"} data={productsdata}  navigation={navigation}/>
 
-   <CardSlider title={"Dairy Products"} data={dairyproductsdata} />
+   <CardSlider title={"Dairy Products"} data={dairyproductsdata}  navigation={navigation} />
    
     </ScrollView>
 
