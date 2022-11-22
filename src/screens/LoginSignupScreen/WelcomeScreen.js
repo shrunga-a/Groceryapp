@@ -56,6 +56,8 @@ const WelcomeScreen = ({navigation}) => {
     <Text style={style.title}> Welcome To SynBasket</Text>  
     <View style={style.logoout}>
     <Image source={welcomeicon} style={style.logo}/>
+
+    </View>
     <View style={hr80}/>
     <Text style={style.text}>Find the best Grocery Around you at Lowest Price.</Text>
      <View style={hr80}/>
@@ -74,13 +76,11 @@ const WelcomeScreen = ({navigation}) => {
       
       </View>
       :
-      
-      
       <View style={style.logged}>
       
       <Text style={style.textlog}>Sign In as<Text style={style.textlogin}> {userloged.email}</Text></Text>
      
-      
+      <View style={style.btnout}>
       <TouchableOpacity onPress={()=> navigation.navigate('Home')}>
       <Text style={style.btn}>Next</Text>
       </TouchableOpacity>
@@ -89,11 +89,14 @@ const WelcomeScreen = ({navigation}) => {
       <Text style={style.btn}> Log out</Text>
       </TouchableOpacity>
     
+      
+      </View>
+      
       </View>
     
     
     }
-    </View> 
+     
 
     </View>
    
@@ -113,7 +116,7 @@ const style = StyleSheet.create({
         fontSize: 40,
         color: colors.col1,
         textAlign: 'center',
-         marginVertical: 5,
+         marginVertical: 10,
         fontWeight: '200',
       //  marginTop: 10,
     },
@@ -146,18 +149,17 @@ const style = StyleSheet.create({
             color: colors.text1,
             textAlign: 'center',
             marginVertical: 30,
-            marginHorizontal:20,
-            fontWeight: '600',
+            marginHorizontal: 10,
+            fontWeight: '700',
             backgroundColor:'#fff',
-            borderRadius:10,
-            padding:9,
-            paddingHorizontal:20,
+            borderRadius: 10,
+            padding: 9,
+            paddingHorizontal: 20,
         },
         logged:{
 
-           flexDirection:'row',
-            alignItems: 'center',
-            justifyContent: 'center',
+           alignItems: 'center',
+           marginTop: 10,
            
         
           

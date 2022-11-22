@@ -75,6 +75,38 @@ module.exports ={
     left:0,
     zIndex: 10,
 
-    }
+    },
+
+    //Increment and decrement css
+
+    incdecbtn:{
+        backgroundColor: 'red',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 50,
+        elevation: 10,
+        padding: 10,
+        color: 'white',
+        fontSize: 20,
+        fontWeight: 'bold',
+    },
+    incdecinput:{
+        backgroundColor:'white',
+        alignItems: 'center',
+        justifyContent: 'center',
+        elevation: 10,
+        padding: 10,
+        width: 50,
+        marginHorizontal: 10,
+        fontSize: 20, 
+    },
+    incdecout:{
+        flexDirection: 'row',
+        alignItems: 'center',
+        margin: 10,
+       
+
+
+    },
 
 }

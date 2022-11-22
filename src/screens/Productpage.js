@@ -1,9 +1,10 @@
-import React from 'react'
-import {Text,View,StyleSheet, ScrollView,TouchableOpacity,Image} from 'react-native'
-import style, { product, dairyproduct } from '../globals/style';
+import React, { useState } from 'react'
+import {Text,View,StyleSheet, ScrollView,TouchableOpacity,Image, TextInput} from 'react-native'
+import style, { product, dairyproduct, hr80 ,incdecbtn ,incdecinput ,incdecout } from '../globals/style';
 import { Ionicons } from '@expo/vector-icons';
 import  {navbtn,navbtnin,containerout, navbtnout, colors,btn2} from '../globals/style'
 
+import {firebase} from '../../Firebase/FirebaseConfig'
 const Productpage = ({navigation ,route}) => {
 
     const data = route.params;  
@@ -11,6 +12,67 @@ const Productpage = ({navigation ,route}) => {
     if(route.params === undefined){
         navigation.navigate('Home')
     }
+    const [quantity,setquantity] =useState('1');
+    const [addonquantity,setaddonquantity] = useState('0');
+
+
+    const addtocart =()=>{
+       // console.log('add to cart')
+
+       const docRef = firebase.firestore().collection('UserCart').doc(firebase.auth().
+       currentUser.uid);
+
+       const data1 ={data,Addonquantity : addonquantity,groceryquantity : quantity }
+       // console.log('data1',data1)
+
+       docRef.get().then((doc) => {
+        if(doc.exists){
+            docRef.update({
+                cart: firebase.firestore.FieldValue.arrayUnion(data1)
+            })
+            alert('your item is Added to cart')
+
+
+        }
+        else{
+            docRef.set({
+                cart : [data1],
+            })
+            alert('your item is Added to cart')
+        
+        }
+
+
+       })
+
+       }
+
+       const increaseQuantity =()=>{
+        setquantity((parseInt(quantity)+1).toString())
+       }
+
+       const decreaseQuantity =()=>{
+        if(parseInt(quantity)>1){
+            setquantity((parseInt(quantity)-1).toString())
+
+        }
+        
+       }
+
+       const increaseAddonQuantity =()=>{
+        setaddonquantity((parseInt(addonquantity)+1).toString())
+       }
+
+       const decreaseAddonQuantity =()=>{
+        if(parseInt(addonquantity)>0){
+            setaddonquantity((parseInt(addonquantity)-1).toString())
+
+        }
+        
+       }
+
+
+
     
     //console.log('product page data', data)
     
@@ -47,12 +109,80 @@ const Productpage = ({navigation ,route}) => {
 
    
    </View>
+
+   <View style={styles.container2}>
+   <Text style={styles.txt1}>Shop Location</Text>
+   <Text style={styles.txt2}>{data.groceryShopname}</Text>
+   <View style={styles.container2in}>
+   <Text style={styles.txt3}>{data.groceryshopAddressBulding}</Text>
+   <View style={styles.dash}/>
+   <Text style={styles.txt3}>{data.groceryShopAddressStreet} </Text>
+   <View style={styles.dash}/>
+   <Text style={styles.txt3}>{data.groceryShopAddressCity} </Text>
+   <View style={styles.dash}/>
+   </View>
    
+    </View>
+
+
+    {data.groceryAddonPrice != '' && 
+        
+        <View style={styles.container3}>
+        <View style={styles.hr81}></View>
+        <Text style={styles.txt6}>Any Addons?</Text>
+        <View style={styles.c3in}>
+        <Text style={styles.txt5}>{data.groceryAddon}</Text>
+        <Text style={styles.txt5}>Rs.{data.groceryAddonPrice}/-</Text>
+        </View>
+        <View style={incdecout}>
+        <Text style={incdecbtn} onPress={()=> increaseAddonQuantity()}>+</Text>
+        <TextInput  value={addonquantity} style={incdecinput}/>
+        <Text  style={incdecbtn} onPress={()=> decreaseAddonQuantity()}>-</Text>
+        
+        </View>
+     
+        </View>
+    }
+
+   <View style={styles.container3}>
+   <View style={styles.hr81}/>
+   <Text style={styles.txt6}>Product Quantitiy </Text>
+   <View style={incdecout}>
+   <Text style={incdecbtn} onPress={()=> increaseQuantity()}>+</Text>
+   <TextInput  value={quantity} style={incdecinput}/>
+   <Text  style={incdecbtn} onPress={()=> decreaseQuantity()}>-</Text>
+   
+   </View>
+
+   
+   
+   </View>
+   
+   </View>
+
+   <View style={styles.container4}>
+   <View style={styles.c4in}>
+   <Text style={styles.txt2}> Total Price</Text>
+   {data.groceryAddonPrice != "" ?  <Text style={styles.txt6}>Rs.
+   {((parseInt(data.groceryPrice) * parseInt(quantity)
+
+    ) + parseInt(addonquantity)*parseInt(data.groceryAddonPrice)
+    
+    ).toString()}/-
+    
+    </Text> :<Text style={styles.txt6}>Rs.
+   {(parseInt(data.groceryPrice) * parseInt(quantity)
+
+   ).toString()}/-
+   </Text> }
+   
+   </View>
+   <View style={styles.hr81}/>
    
    </View>
 
    <View style={styles.btncont}>
-   <TouchableOpacity style={btn2}>
+   <TouchableOpacity style={btn2} onPress={()=> addtocart()}>
    <Text style={styles.btntxt}> Add to Cart</Text> 
    </TouchableOpacity>
    
@@ -180,6 +310,111 @@ const styles= StyleSheet.create({
         marginTop: 0,
         flexDirection: 'row',
     },
+    container2:{
+        width: '90%',
+        backgroundColor: colors.col1,
+        padding: 20,
+        borderRadius: 10,
+        elevation: 10,
+        alignItems: 'center',
+        marginTop: 10,
+       // marginRight: 40,
+
+    },
+    txt2:{
+        color: colors.text3,
+        fontSize: 30,
+        fontWeight: '200',
+        marginVertical: 10,
+
+    },
+    container2in:{
+        flexDirection: 'row',
+        alignItems: 'center',
+
+    },
+    txt3:{
+        color: colors.text1,
+        fontSize: 16,
+        width: '30%',
+        textAlign: 'center',
+      
+      
+
+
+    },
+    txt5:{
+        color: 'black',
+        fontSize: 16,
+       // width: '30%',
+        textAlign: 'center',
+      
+      
+
+
+    },
+    dash:{
+        width: 1,
+        height: 20,
+        backgroundColor: colors.text1,
+        marginHorizontal: 5,
+    },
+    container3:{
+        width: '90%',
+        alignSelf: 'center',
+        alignItems: 'center',
+       
+
+    },
+    c3in:{
+        flexDirection: 'row',
+        justifyContent: 'center',
+        width: '100%',
+
+
+    },
+    text4:{
+        color: colors.text3,
+        fontSize: 20,
+        marginHorizontal: 10,
+
+    },
+
+    hr81:{
+        width: '80%',
+        borderBottomColor: 'black',
+        borderBottomWidth: 1,
+        marginVerticle:20,
+        marginTop: 8,
+       
+    },
+    txt6:{
+        color: 'red',
+        fontSize: 16,
+       // width: '30%',
+        textAlign: 'center',
+        fontWeight: 'bold',
+      
+      
+
+
+    },
+    container4:{
+        width: '90%',
+        alignSelf: 'center',
+        alignItems: 'center',
+       
+    },
+    c4in:{
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        alignItems: 'center',
+        width: '100%',
+
+
+    },
+    
+
 
 
 
