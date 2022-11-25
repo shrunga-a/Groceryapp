@@ -10,6 +10,7 @@ import { AntDesign } from '@expo/vector-icons';
 
 import { firebase } from '../../Firebase/FirebaseConfig'
 import CardSlider from '../component/CardSlider'
+import BottomNav from '../component/BottomNav'
  
 
 const HomeScreen = ({navigation}) => {
@@ -42,10 +43,17 @@ const HomeScreen = ({navigation}) => {
 
 
   return (
-    <ScrollView style={style.container}>
+    <View style={style.container}>
     <StatusBar/>
     <HomeHeadNav navigation={navigation}/>
+
+    <View style={style.bottomnav}>
+    <BottomNav  navigation={navigation}/>
     
+    </View>
+  
+
+    <ScrollView>
 
     <View style={style.searchbox}>
     <FontAwesome name="search" size={24} color="black" style={style.searchicon} />
@@ -88,7 +96,12 @@ const HomeScreen = ({navigation}) => {
 
    <CardSlider title={"Dairy Products"} data={dairyproductsdata}  navigation={navigation} />
    
+    
+    
     </ScrollView>
+
+    
+    </View>
 
  
    
@@ -126,10 +139,13 @@ const style= StyleSheet.create({
     fontSize:18,
     color:'black',
   },
- 
+  bottomnav:{
+    position: 'absolute',
+    bottom:0,
+    width: '100%',
+    backgroundColor: colors.col1,
+    zIndex: 20,
 
-
-
-
+  }
 })
 

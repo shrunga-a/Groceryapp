@@ -10,6 +10,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Userprofile from './src/screens/Userprofile';
 import Productpage from './src/screens/Productpage';
+import Usercart from './src/screens/Usercart';
 
 
 
@@ -32,6 +33,9 @@ export default function App() {
     <Stack.Screen name="Userprofile" component={Userprofile } options={{headerShown: false}} />
 
     <Stack.Screen name="productpage" component={Productpage } options={{headerShown: false}} />
+               
+
+    <Stack.Screen name="cart" component={Usercart } options={{headerShown: false}} />
 
   </Stack.Navigator>
   
